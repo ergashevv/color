@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rangni Toping</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 50px;
+        }
+
+        .game-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .rgb-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .color-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .restart-btn {
+            margin-top: 20px;
+            background-color: #28a745;
+        }
+
+        .restart-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Rangni Toping!</h1>
+    <div class="game-container">
+        <p class="rgb-code" id="rgb-code">RGB(?,?,?)</p>
+        <div id="color-buttons"></div>
+        <div class="message" id="message"></div>
+        <button class="btn restart-btn" id="restart-btn">Qayta O'ynash</button>
+    </div>
+
+    <script>
+        const rgbCodeElement = document.getElementById('rgb-code');
+        const colorButtonsContainer = document.getElementById('color-buttons');
+        const messageElement = document.getElementById('message');
+        const restartButton = document.getElementById('restart-btn');
+
+        let correctColor;
+
+        function getRandomNumber(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function generateRandomColor() {
+            const r = getRandomNumber(256);
+            const g = getRandomNumber(256);
+            const b = getRandomNumber(256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function startGame() {
+            colorButtonsContainer.innerHTML = '';
+            messageElement.textContent = '';
+
+            correctColor = generateRandomColor();
+            rgbCodeElement.textContent = correctColor.toUpperCase();
+
+            const correctButtonIndex = getRandomNumber(6);
+
+            for (let i = 0; i < 6; i++) {
+                const colorButton = document.createElement('div');
+                colorButton.classList.add('color-btn');
+                const color = i === correctButtonIndex ? correctColor : generateRandomColor();
+                colorButton.style.backgroundColor = color;
+
+                colorButton.addEventListener('click', () => {
+                    if (color === correctColor) {
+                        messageElement.textContent = "Tabriklaymiz! To'g'ri rangni topdingiz!";
+                        messageElement.style.color = 'green';
+                        setAllButtonsDisabled();
+                    } else {
+                        messageElement.textContent = "Xato! Qayta urinib ko'ring!";
+                        messageElement.style.color = 'red';
+                    }
+                });
+
+                colorButtonsContainer.appendChild(colorButton);
+            }
+        }
+
+        function setAllButtonsDisabled() {
+            const buttons = document.querySelectorAll('.color-btn');
+            buttons.forEach(button => {
+                button.style.pointerEvents = 'none';
+            });
+        }
+
+        restartButton.addEventListener('click', startGame);
+
+        // Start the game initially
+        startGame();
+    </script>
+</body>
+
+</html>
